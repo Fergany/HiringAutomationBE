@@ -1,7 +1,9 @@
 package com.orange.hiring_automation.model;
 
 import javax.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "jobs")
 public class Job {
@@ -27,7 +29,6 @@ public class Job {
     }
 
     public Job(){
-
     }
 
     public Job(String title, String description, String requiredSkills){
@@ -36,19 +37,4 @@ public class Job {
         this.requiredSkills = requiredSkills;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getRequiredSkills() {
-        return requiredSkills;
-    }
 }
