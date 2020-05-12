@@ -2,6 +2,7 @@ package com.orange.hiring_automation.model;
 
 import javax.persistence.*;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 @Data
 @Entity
@@ -15,10 +16,10 @@ public class Job {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 5000)
     private String description;
 
-    @Column(name = "required_skills")
+    @Column(name = "required_skills", length = 5000)
     private String requiredSkills;
 
     @Override
