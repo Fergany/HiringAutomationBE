@@ -1,6 +1,7 @@
 package com.orange.hiring_automation.model;
 
 import javax.persistence.*;
+
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
