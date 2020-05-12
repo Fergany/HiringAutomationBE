@@ -40,7 +40,7 @@ public class JobController {
 
     @ApiOperation(value = "Get a job by Id")
     @GetMapping("/jobs/{id}")
-    Job getById(@ApiParam(value = "Job id from which job object will retrieve", required = true) @PathVariable Long id) {
+    Job getById(@ApiParam(value = "Job id from which job object will retrieve", required = true, example = "123") @PathVariable Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new JobNotFoundException(id));
     }
@@ -48,8 +48,8 @@ public class JobController {
     @ApiOperation(value = "Update job")
     @PutMapping("/jobs/{id}")
     Job edit(
-            @ApiParam(value = "Update job object", required = true) @Valid @RequestBody Job newJob,
-            @ApiParam(value = "Job Id to update job object", required = true) @PathVariable Long id) {
+            @ApiParam(value = "Update job object",required = true, example = "123") @Valid @RequestBody Job newJob,
+            @ApiParam(value = "Job Id to update job object", required = true, example = "123") @PathVariable Long id) {
         return repository.findById(id)
                 .map(job -> {
                     job.setTitle(newJob.getTitle());
@@ -66,7 +66,7 @@ public class JobController {
     @ApiOperation(value = "Delete a job")
     @DeleteMapping("/jobs/{id}")
     void delete(
-            @ApiParam(value = "Employee Id from which employee object will delete from database table", required = true) @PathVariable Long id) {
+            @ApiParam(value = "Employee Id from which employee object will delete from database table", required = true, example = "123") @PathVariable Long id) {
         repository.deleteById(id);
     }
 }
