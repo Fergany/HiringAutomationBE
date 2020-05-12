@@ -23,24 +23,23 @@ public class JobController {
     }
 
     @GetMapping("/jobs")
-    List<Job> all() {
+    List<Job> getAll() {
         return repository.findAll();
     }
 
     @PostMapping("/jobs")
-    Job addJob(@RequestBody Job newJob) {
+    Job add(@RequestBody Job newJob) {
         return repository.save(newJob);
     }
 
     @GetMapping("/jobs/{id}")
-    Job getJobById(@PathVariable Long id) {
-
+    Job getById(@PathVariable Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new JobNotFoundException(id));
     }
 
     @PutMapping("/jobs/{id}")
-    Job editJob(@RequestBody Job newJob, @PathVariable Long id) {
+    Job edit(@RequestBody Job newJob, @PathVariable Long id) {
         return repository.findById(id)
                 .map(job -> {
                     job.setTitle(newJob.getTitle());
@@ -55,7 +54,7 @@ public class JobController {
     }
 
     @DeleteMapping("/jobs/{id}")
-    void deleteJob(@PathVariable Long id) {
+    void delete(@PathVariable Long id) {
         repository.deleteById(id);
     }
 }
