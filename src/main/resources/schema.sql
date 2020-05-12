@@ -1,7 +1,0 @@
-CREATE TABLE jobs
-(
- job_id INTEGER PRIMARY KEY,
- title VARCHAR(100) NOT NULL,
- description VARCHAR(5000) DEFAULT NULL,
- required_skills VARCHAR(5000) DEFAULT NULL
-);
