@@ -1,4 +1,4 @@
-package com.orange.HiringAutomationBE;
+package com.orange.HiringAutomation;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,13 +1,13 @@
-package com.orange.HiringAutomationBE;
+package com.orange.HiringAutomation;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HiringAutomationBeApplication {
+public class HiringAutomationApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HiringAutomationBeApplication.class, args);
+		SpringApplication.run(HiringAutomationApplication.class, args);
 	}
 
 }
