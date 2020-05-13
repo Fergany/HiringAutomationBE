@@ -23,13 +23,6 @@ public class Job {
     @Column(name = "required_skills", length = 5000)
     private String requiredSkills;
 
-    @Override
-    public String toString() {
-        return String.format(
-                "Job[id=%d, title='%s', description='%s, required_skills=%s']",
-                id, title, description, requiredSkills);
-    }
-
     public Job(){
     }
 
