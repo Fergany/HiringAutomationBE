@@ -17,6 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import javax.validation.Valid;
 import java.util.List;
 
+
 @RestController
 @Api(tags = {"Jobs API"}, description = "Operations pertaining to jobs in Hiring Automation System", produces = "application/json")
 public class JobController {
