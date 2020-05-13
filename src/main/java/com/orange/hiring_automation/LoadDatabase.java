@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Slf4j
 class LoadDatabase {
-    private static final Logger log = LoggerFactory.getLogger(HiringAutomationApplication.class);
 
     @Bean
     CommandLineRunner initDatabase(JobRepository repository) {
