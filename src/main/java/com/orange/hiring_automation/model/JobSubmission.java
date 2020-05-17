@@ -1,7 +1,7 @@
 package com.orange.hiring_automation.model;
 
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -22,6 +22,6 @@ public class JobSubmission {
     private Job job;
 
     @Column(name = "submitted_at")
-    @CreationTimestamp
+    @CreatedDate
     private Date submittedAt;
 }
