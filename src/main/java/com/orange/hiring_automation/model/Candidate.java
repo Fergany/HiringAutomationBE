@@ -26,6 +26,6 @@ public class Candidate {
     @Column(name = "attached_cv")
     private String attachedCV;
 
-    @OneToMany(mappedBy = "candidate")
-    private Set<JobSubmission> submissions;
+//    @OneToMany(mappedBy = "candidate")
+//    private Set<JobSubmission> submissions;
 }
