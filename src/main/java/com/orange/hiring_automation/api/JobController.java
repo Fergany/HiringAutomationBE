@@ -1,9 +1,13 @@
 package com.orange.hiring_automation.api;
 
 import com.orange.hiring_automation.exceptions.JobNotFoundException;
+import com.orange.hiring_automation.model.Candidate;
 import com.orange.hiring_automation.model.Job;
+import com.orange.hiring_automation.model.JobSubmission;
+import com.orange.hiring_automation.repository.CandidateRepository;
 import com.orange.hiring_automation.repository.JobRepository;
 
+import com.orange.hiring_automation.repository.JobSubmissionRepository;
 import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,15 +20,20 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
 @Api(tags = {"Jobs API"}, description = "Operations pertaining to jobs in Hiring Automation System", produces = "application/json")
 public class JobController {
     private final JobRepository repository;
+    private final CandidateRepository candidateRepository;
+    private final JobSubmissionRepository jobSubmissionRepository;
 
-    JobController(JobRepository repository) {
+    JobController(JobRepository repository, CandidateRepository candidateRepository, JobSubmissionRepository jobSubmissionRepository) {
         this.repository = repository;
+        this.candidateRepository = candidateRepository;
+        this.jobSubmissionRepository = jobSubmissionRepository;
     }
 
     @ApiOperation(value = "View a list of available jobs", response = List.class)
@@ -69,5 +78,18 @@ public class JobController {
     void delete(
             @ApiParam(value = "Employee Id from which employee object will delete from database table", required = true, example = "123") @PathVariable Long id) {
         repository.deleteById(id);
+    }
+
+    @ApiOperation(value = "Submit job")
+    @PostMapping("/job/{jobId}/apply")
+    void submitJob(@ApiParam(value = "Job Id", required = true, example = "123")@PathVariable Long jobId,
+                   @ApiParam(value = "Candidate Object", required = true) @RequestBody Candidate candidate){
+        Candidate newCandidate = candidateRepository.save(candidate);
+        JobSubmission jobSubmission = new JobSubmission();
+        Job job = repository.findById(jobId)
+                .orElseThrow(() -> new JobNotFoundException(jobId));
+        jobSubmission.setJob(job);
+        jobSubmission.setCandidate(newCandidate);
+        jobSubmissionRepository.save(jobSubmission);
     }
 }
