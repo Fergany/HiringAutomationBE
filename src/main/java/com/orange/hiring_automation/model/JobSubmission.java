@@ -11,6 +11,7 @@ import java.util.Date;
 @Table(name = "job_submissions")
 public class JobSubmission {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
