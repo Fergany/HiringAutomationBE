@@ -2,12 +2,14 @@ package com.orange.hiring_automation.model;
 
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "job_submissions")
 public class JobSubmission {
     @Id
@@ -22,7 +24,7 @@ public class JobSubmission {
     @JoinColumn(name = "job_id")
     private Job job;
 
-    @Column(name = "submitted_at")
+    @Column(name = "submitted_at", nullable = false, updatable = false)
     @CreatedDate
     private Date submittedAt;
 }
