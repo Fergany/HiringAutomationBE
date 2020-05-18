@@ -25,8 +25,8 @@ public class Job {
     @Column(name = "required_skills", length = 5000)
     private String requiredSkills;
 
-    @OneToMany(mappedBy = "job")
-    private Set<JobSubmission> submissions;
+//    @OneToMany(mappedBy = "job")
+//    private Set<JobSubmission> submissions;
 
     public Job(){
     }
