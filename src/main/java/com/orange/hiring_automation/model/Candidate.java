@@ -3,7 +3,6 @@ package com.orange.hiring_automation.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Data
 @Entity
@@ -23,8 +22,9 @@ public class Candidate {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "attached_cv")
-    private String attachedCV;
+    @OneToOne
+    @JoinColumn(name = "file_uploaded_id")
+    private FileUploaded fileUploaded;
 
 //    @OneToMany(mappedBy = "candidate")
 //    private Set<JobSubmission> submissions;
