@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "file_uploaded")
+@Table(name = "uploaded_files")
 public class FileUploaded {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,4 +26,5 @@ public class FileUploaded {
     @Column(name = "uploaded_at", nullable = false, updatable = false)
     @CreatedDate
     private Date uploadedAt;
+
 }
