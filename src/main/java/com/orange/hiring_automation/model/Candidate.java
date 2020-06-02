@@ -23,9 +23,6 @@ public class Candidate {
     private String phone;
 
     @OneToOne
-    @JoinColumn(name = "file_uploaded_id")
+    @JoinColumn(name = "file_id")
     private FileUploaded fileUploaded;
-
-//    @OneToMany(mappedBy = "candidate")
-//    private Set<JobSubmission> submissions;
 }
