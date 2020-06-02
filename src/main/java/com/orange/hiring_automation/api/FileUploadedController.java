@@ -5,6 +5,7 @@ import com.orange.hiring_automation.repository.FileUploadedRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,8 @@ import java.nio.file.Paths;
 @RestController
 public class FileUploadedController {
     private FileUploadedRepository fileUploadedRepository;
-    private static String UPLOADED_FOLDER = "C://temp//";
+    @Value( "${file.upload-dir}" )
+    private static String UPLOADED_FOLDER;
 
     FileUploadedController(FileUploadedRepository fileUploadedRepository){
         this.fileUploadedRepository = fileUploadedRepository;
