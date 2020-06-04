@@ -83,9 +83,9 @@ public class JobController {
     @ApiOperation(value = "Submit job")
     @PostMapping(value = "/job/{jobId}/apply")
     JobSubmission submitJob(@ApiParam(value = "Job Id", required = true, example = "123") @PathVariable Long jobId,
-                   @ApiParam(value = "Candidate Object", required = true) @RequestBody Candidate candidate,
-                   @ApiParam(value = "File Uploaded Id", required = true) @RequestParam Long fileUploadedId) throws IOException {
+                   @ApiParam(value = "Candidate Object", required = true) @RequestBody Candidate candidate) throws IOException {
 
+        Long fileUploadedId = candidate.getFileUploaded().getId();
         FileUploaded fileUploaded = fileUploadedRepository.findById(fileUploadedId)
                 .orElseThrow(() -> new ObjectNotFoundException("FileUploaded", fileUploadedId));
         candidate.setFileUploaded(fileUploaded);
