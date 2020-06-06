@@ -5,6 +5,8 @@ import javax.persistence.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.Set;
+
 @Data
 @Entity
 @Table(name = "jobs")
@@ -22,6 +24,9 @@ public class Job {
 
     @Column(name = "required_skills", length = 5000)
     private String requiredSkills;
+
+//    @OneToMany(mappedBy = "job")
+//    private Set<JobSubmission> submissions;
 
     public Job(){
     }
