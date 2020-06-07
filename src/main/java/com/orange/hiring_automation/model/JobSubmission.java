@@ -1,5 +1,6 @@
 package com.orange.hiring_automation.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -26,5 +27,6 @@ public class JobSubmission {
 
     @Column(name = "submitted_at", nullable = false, updatable = false)
     @CreatedDate
+    @JsonFormat(pattern="MM/dd/yyyy")
     private Date submittedAt;
 }
