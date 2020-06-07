@@ -101,4 +101,12 @@ public class JobController {
     }
 
 
+    @ApiOperation(value = "List Applications")
+    @GetMapping(value = "/job/{jobId}/applications")
+    List<JobSubmission> getJobSumbission(@ApiParam(value = "Job Id", defaultValue = "1") @PathVariable Long jobId){
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new ObjectNotFoundException("Job", jobId));
+        return jobSubmissionRepository.findByJob(job);
+    }
+
 }
