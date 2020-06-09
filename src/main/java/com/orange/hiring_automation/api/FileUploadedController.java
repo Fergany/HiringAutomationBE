@@ -1,16 +1,17 @@
 package com.orange.hiring_automation.api;
 
+import com.orange.hiring_automation.exceptions.ObjectNotFoundException;
 import com.orange.hiring_automation.model.FileUploaded;
 import com.orange.hiring_automation.repository.FileUploadedRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,8 +21,8 @@ import java.nio.file.Paths;
 @RestController
 public class FileUploadedController {
     private FileUploadedRepository fileUploadedRepository;
-    @Value( "${file.upload-dir}" )
-    private static String UPLOADED_FOLDER;
+//    @Value( "${file.upload-dir}" )
+    private static String UPLOADED_FOLDER = "C://temp//";
 
     FileUploadedController(FileUploadedRepository fileUploadedRepository){
         this.fileUploadedRepository = fileUploadedRepository;
@@ -37,9 +38,22 @@ public class FileUploadedController {
         return fileUploadedRepository.save(fileUploaded);
     }
 
+    @ApiOperation(value = "Download File")
+    @GetMapping(value = "/download/{id}")
+    File downloadFileById(@ApiParam(value = "File Id", required = true, example = "3") @PathVariable Long id) throws IOException {
+        FileUploaded fileUploaded = fileUploadedRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("FileUploaded", id));
+        return downloadFile(fileUploaded.getLocation(), fileUploaded.getName());
+    }
+
     private void saveFile(String uploadedFolder, MultipartFile file) throws IOException {
         byte[] bytes = file.getBytes();
         Path path = Paths.get(uploadedFolder + file.getOriginalFilename());
         Files.write(path, bytes);
+    }
+
+    private File downloadFile(String uploadedFolder, String fileName) throws IOException {
+        File file = ResourceUtils.getFile("file:" + uploadedFolder + fileName);
+        return file;
     }
 }
