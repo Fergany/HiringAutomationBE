@@ -6,26 +6,36 @@ import com.orange.hiring_automation.repository.FileUploadedRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@Api(tags = "File Upload API", value = "Uploading file to the system" , produces = "application/json")
+@Api(tags = "File Upload API", value = "Uploading file to the system", produces = "application/json")
 @RestController
 public class FileUploadedController {
+    private ServletContext servletContext;
     private FileUploadedRepository fileUploadedRepository;
-//    @Value( "${file.upload-dir}" )
+    //    @Value( "${file.upload-dir}" )
     private static String UPLOADED_FOLDER = "C://temp//";
 
-    FileUploadedController(FileUploadedRepository fileUploadedRepository){
+    FileUploadedController(FileUploadedRepository fileUploadedRepository, ServletContext servletContext) {
         this.fileUploadedRepository = fileUploadedRepository;
+        this.servletContext = servletContext;
     }
 
     @ApiOperation(value = "Upload File")
@@ -39,11 +49,22 @@ public class FileUploadedController {
     }
 
     @ApiOperation(value = "Download File")
-    @GetMapping(value = "/download/{id}")
-    File downloadFileById(@ApiParam(value = "File Id", required = true, example = "3") @PathVariable Long id) throws IOException {
+    @GetMapping(value = "/download/{id}",
+            produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @ResponseBody
+    public ResponseEntity<ByteArrayResource> getFile(@ApiParam(value = "File Id", required = true, example = "3") @PathVariable Long id) throws IOException {
         FileUploaded fileUploaded = fileUploadedRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("FileUploaded", id));
-        return downloadFile(fileUploaded.getLocation(), fileUploaded.getName());
+        MediaType mediaType = FileUploadedController.getMediaTypeForFileName(this.servletContext, fileUploaded.getName());
+        Path path = Paths.get(fileUploaded.getLocation() + "" + fileUploaded.getName());
+        byte[] data = Files.readAllBytes(path);
+        ByteArrayResource resource = new ByteArrayResource(data);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + path.getFileName().toString())
+                .contentType(mediaType)
+                .contentLength(data.length)
+                .body(resource);
     }
 
     private void saveFile(String uploadedFolder, MultipartFile file) throws IOException {
@@ -56,4 +77,15 @@ public class FileUploadedController {
         File file = ResourceUtils.getFile("file:" + uploadedFolder + fileName);
         return file;
     }
+
+    public static MediaType getMediaTypeForFileName(ServletContext servletContext, String fileName) {
+        String mineType = servletContext.getMimeType(fileName);
+        try {
+            MediaType mediaType = MediaType.parseMediaType(mineType);
+            return mediaType;
+        } catch (Exception e) {
+            return MediaType.APPLICATION_OCTET_STREAM;
+        }
+    }
 }
+
