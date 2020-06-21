@@ -20,10 +20,10 @@ public class SimpleStateMachineConfiguration
 
         states
                 .withStates()
-                .initial("SI")
-                .end("SF")
+                .initial("Job Submission")
+                .end("Process Completed")
                 .states(
-                        new HashSet<>(Arrays.asList("S1", "S2", "S3")));
+                        new HashSet<>(Arrays.asList("Application Scan", "HR Interview", "Technical Interview")));
 
     }
 
@@ -33,10 +33,12 @@ public class SimpleStateMachineConfiguration
             throws Exception {
 
         transitions.withExternal()
-                .source("SI").target("S1").event("E1").and()
+                .source("Job Submission").target("Application Scan").event("Scan").and()
                 .withExternal()
-                .source("S1").target("S2").event("E2").and()
+                .source("Application Scan").target("HR Interview").event("Interview By HR").and()
                 .withExternal()
-                .source("S2").target("SF").event("end");
+                .source("HR Interview").target("Technical Interview").event("Interview By Technical").and()
+                .withExternal()
+                .source("Technical Interview").target("Process Completed").event("end");
     }
 }
