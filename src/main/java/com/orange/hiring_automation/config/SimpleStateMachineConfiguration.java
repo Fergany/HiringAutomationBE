@@ -12,33 +12,34 @@ import java.util.HashSet;
 @Configuration
 @EnableStateMachine
 public class SimpleStateMachineConfiguration
-        extends StateMachineConfigurerAdapter<String, String> {
+        extends StateMachineConfigurerAdapter<States, Events> {
 
     @Override
-    public void configure(StateMachineStateConfigurer<String, String> states)
+    public void configure(StateMachineStateConfigurer<States, Events> states)
             throws Exception {
 
         states
                 .withStates()
-                .initial("Job Submission")
-                .end("Process Completed")
+                .initial(States.JOB_SUBMISSION)
+                .end(States.PROCESS_COMPLETED)
                 .states(
-                        new HashSet<>(Arrays.asList("Application Scan", "HR Interview", "Technical Interview")));
+                        new HashSet<>(Arrays.asList(States.APPLICATION_SCAN, States.HR_INTERVIEW, States.TECHNICAL_INTERVIEW)));
 
     }
 
     @Override
     public void configure(
-            StateMachineTransitionConfigurer<String, String> transitions)
+            StateMachineTransitionConfigurer<States, Events> transitions)
             throws Exception {
 
         transitions.withExternal()
-                .source("Job Submission").target("Application Scan").event("Scan").and()
+                .source(States.JOB_SUBMISSION).target(States.APPLICATION_SCAN).event(Events.APPLICATION_SCAN).and()
                 .withExternal()
-                .source("Application Scan").target("HR Interview").event("Interview By HR").and()
+                .source(States.APPLICATION_SCAN).target(States.HR_INTERVIEW).event(Events.HR_INTERVIEW).and()
                 .withExternal()
-                .source("HR Interview").target("Technical Interview").event("Interview By Technical").and()
+                .source(States.HR_INTERVIEW).target(States.TECHNICAL_INTERVIEW).event(Events.TECHNICAL_INTERVIEW).and()
                 .withExternal()
-                .source("Technical Interview").target("Process Completed").event("end");
+                .source(States.TECHNICAL_INTERVIEW).target(States.PROCESS_COMPLETED).event(Events.END_THE_PROCESS);
     }
 }
+
