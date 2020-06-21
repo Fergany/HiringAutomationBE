@@ -1,5 +1,7 @@
 package com.orange.hiring_automation.api;
 
+import com.orange.hiring_automation.config.Events;
+import com.orange.hiring_automation.config.States;
 import com.orange.hiring_automation.exceptions.ObjectNotFoundException;
 import com.orange.hiring_automation.model.Candidate;
 import com.orange.hiring_automation.model.Job;
@@ -12,8 +14,7 @@ import com.orange.hiring_automation.repository.JobSubmissionRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.statemachine.StateMachine;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,12 +29,14 @@ public class JobController {
     private final CandidateRepository candidateRepository;
     private final JobSubmissionRepository jobSubmissionRepository;
     private final FileUploadedRepository fileUploadedRepository;
+    private final StateMachine<States, Events> stateMachine;
 
-    JobController(JobRepository jobRepository, CandidateRepository candidateRepository, JobSubmissionRepository jobSubmissionRepository, FileUploadedRepository fileUploadedRepository) {
+    JobController(JobRepository jobRepository, CandidateRepository candidateRepository, JobSubmissionRepository jobSubmissionRepository, FileUploadedRepository fileUploadedRepository, StateMachine<States, Events> stateMachine) {
         this.jobRepository = jobRepository;
         this.candidateRepository = candidateRepository;
         this.jobSubmissionRepository = jobSubmissionRepository;
         this.fileUploadedRepository = fileUploadedRepository;
+        this.stateMachine = stateMachine;
     }
 
     @ApiOperation(value = "View a list of available jobs", response = List.class)
@@ -97,6 +100,7 @@ public class JobController {
 
         jobSubmission.setJob(job);
         jobSubmission.setCandidate(newCandidate);
+        stateMachine.start();
         return jobSubmissionRepository.save(jobSubmission);
     }
 
