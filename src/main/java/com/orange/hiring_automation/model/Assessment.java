@@ -22,7 +22,7 @@ public class Assessment {
 
     @ManyToOne
     @JoinColumn(name = "exam_id")
-    Candidate exam;
+    Exam exam;
 
     @Column(name = "score")
     double score;

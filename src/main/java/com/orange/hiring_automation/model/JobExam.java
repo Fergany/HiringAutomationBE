@@ -1,7 +1,6 @@
 package com.orange.hiring_automation.model;
 
 import lombok.Data;
-import org.hibernate.annotations.ManyToAny;
 
 import javax.persistence.*;
 

@@ -14,5 +14,12 @@ public class Exam {
     Long id;
 
     @Column(name = "exam_link", length = 500)
-    String examLink;
+    private String examLink;
+
+    public Exam(){
+    }
+
+    public Exam(String examLink){
+        this.examLink = examLink;
+    }
 }
