@@ -38,6 +38,7 @@ public class AssessmentController {
         Assessment assessment = new Assessment();
         assessment.setCandidate(candidate);
         assessment.setExam(exam);
+
         return assessmentRepository.save(assessment);
     }
 }
