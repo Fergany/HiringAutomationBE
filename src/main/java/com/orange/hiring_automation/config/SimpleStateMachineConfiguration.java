@@ -35,6 +35,8 @@ public class SimpleStateMachineConfiguration
         transitions.withExternal()
                 .source(States.JOB_SUBMISSION).target(States.APPLICATION_SCAN).event(Events.APPLICATION_SCAN).and()
                 .withExternal()
+                .source(States.APPLICATION_SCAN).target(States.CANDIDATE_ASSESSMENT).event(Events.CANDIDATE_ASSESSMENT).and()
+                .withExternal()
                 .source(States.APPLICATION_SCAN).target(States.HR_INTERVIEW).event(Events.HR_INTERVIEW).and()
                 .withExternal()
                 .source(States.HR_INTERVIEW).target(States.TECHNICAL_INTERVIEW).event(Events.TECHNICAL_INTERVIEW).and()

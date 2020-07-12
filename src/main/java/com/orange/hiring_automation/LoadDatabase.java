@@ -1,6 +1,10 @@
 package com.orange.hiring_automation;
 
+import com.orange.hiring_automation.model.Exam;
 import com.orange.hiring_automation.model.Job;
+import com.orange.hiring_automation.model.JobExam;
+import com.orange.hiring_automation.repository.ExamRepository;
+import com.orange.hiring_automation.repository.JobExamRepository;
 import com.orange.hiring_automation.repository.JobRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -12,9 +16,9 @@ import org.springframework.context.annotation.Configuration;
 class LoadDatabase {
 
     @Bean
-    CommandLineRunner initDatabase(JobRepository repository) {
+    CommandLineRunner initDatabase(JobRepository jobRepository, ExamRepository examRepository, JobExamRepository jobExamRepository) {
         return args -> {
-            log.info("Preloading " + repository.save(new Job("Software Engineer",
+            Job sofwareEngineerJob = jobRepository.save(new Job("Software Engineer",
                     "Design and implement our PaaS eCommerce backend in Scala as well as our core infrastructure components like database mappings and web service APIs for high availability e-commerce\n" +
                             "Analyse product requirements and discuss technical approaches\n" +
                             "Test software components regarding usability, functionality and performance and work closely with Product Management and DevOps\n" +
@@ -25,9 +29,10 @@ class LoadDatabase {
                             "Solid understanding of parallel and asynchronous programming as well as non-blocking I/O\n" +
                             "Experience in developing REST APIs and knowledge of scalable architectures (incl. sharding, replication, load balancing and fail over)\n" +
                             "Aspiration to constantly improve yourself and learn new technologies, concepts, etc.\n" +
-                            "Great team player & nice colleague who enjoys our working & company culture")));
+                            "Great team player & nice colleague who enjoys our working & company culture"));
+            log.info("Preloading " + sofwareEngineerJob);
 
-            log.info("Preloading " + repository.save(new Job("Business development manager",
+            Job businessDevelopmentManagerJob = jobRepository.save(new Job("Business development manager",
                     "Support of our team head in managing our partner accounts\n" +
                             "Support and independent acquisition of new cooperation and sales partners in Europe\n" +
                             "Support for existing customers and new partners from the e-commerce sector\n" +
@@ -42,7 +47,19 @@ class LoadDatabase {
                             "Confident manner and high customer orientation\n" +
                             "Very good analytical, communication and presentation skills\n" +
                             "Structured work and the ability to work on different tasks / deadlines / stakeholders in parallel\n" +
-                            "Team player who would like to work in a tech company together with really good colleagues in an international environment")));
+                            "Team player who would like to work in a tech company together with really good colleagues in an international environment"));
+
+            log.info("Preloading " + businessDevelopmentManagerJob);
+
+            Exam exam = examRepository.save(new Exam("https://leetcode.com/explore/featured/card/30-day-leetcoding-challenge/528/week-1/"));
+
+            log.info("Preloading " + exam);
+
+            JobExam jobExam = new JobExam();
+            jobExam.setJob(sofwareEngineerJob);
+            jobExam.setExam(exam);
+            jobExamRepository.save(jobExam);
+            log.info("Preloading " + jobExam);
         };
     }
 }

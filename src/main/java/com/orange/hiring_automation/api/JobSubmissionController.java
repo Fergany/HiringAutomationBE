@@ -24,10 +24,10 @@ public class JobSubmissionController {
     }
 
     @ApiOperation(value = "Get Job Submission by Id")
-    @GetMapping(value = "/jobSubmission/{jobSubmissionId}")
-    JobSubmission getJobSubmission(@ApiParam(value = "jobSubmissionId", required = true, defaultValue = "1") @PathVariable Long jobSubmissionId){
+    @GetMapping(value = "/jobSubmission/{id}")
+    JobSubmission getJobSubmission(@ApiParam(value = "jobSubmissionId", required = true, defaultValue = "1") @PathVariable Long id){
         stateMachine.sendEvent(Events.APPLICATION_SCAN);
-        return jobSubmissionRepository.findById(jobSubmissionId).orElseThrow(
-                () -> new ObjectNotFoundException("Job Submission", jobSubmissionId));
+        return jobSubmissionRepository.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("Job Submission", id));
     }
 }
