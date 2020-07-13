@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Api(tags = "Assessment API", value = "Assessment API ...", produces = "application/json")
 @RestController
 public class AssessmentController {
@@ -40,5 +42,24 @@ public class AssessmentController {
         assessment.setExam(exam);
 
         return assessmentRepository.save(assessment);
+    }
+
+    @ApiOperation(value = "Update Assessment")
+    @PutMapping(value = "/assessments")
+    Assessment update(@ApiParam(value="Assessment Object") @RequestBody Assessment assessment) {
+        Long id = assessment.getId();
+        Assessment updatedAssessment = assessmentRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Assessment", id));
+        updatedAssessment.setSubmittedAt(assessment.getSubmittedAt() != null? assessment.getSubmittedAt() : updatedAssessment.getSubmittedAt());
+        updatedAssessment.setScore(assessment.getScore() != 0? assessment.getScore() : updatedAssessment.getScore());
+        updatedAssessment.setCandidateFeedback(assessment.getCandidateFeedback() != null? assessment.getCandidateFeedback() : updatedAssessment.getCandidateFeedback());
+        updatedAssessment.setInterviewerFeedback(assessment.getInterviewerFeedback() != null? assessment.getInterviewerFeedback() : updatedAssessment.getInterviewerFeedback());
+        return assessmentRepository.save(updatedAssessment);
+    }
+
+    @ApiOperation(value = "List Assessments")
+    @GetMapping(value = "/assessments")
+    List<Assessment> getAllAssessments(){
+        return assessmentRepository.findAll();
     }
 }
