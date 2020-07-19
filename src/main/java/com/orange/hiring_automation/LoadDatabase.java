@@ -68,6 +68,8 @@ class LoadDatabase {
 
             UserRole technicalInterviewerUserRole =  userRoleRepository.save( new UserRole("TECHNICAL_INTERVIEWER"));
             UserRole HRInterviewerUserRole =  userRoleRepository.save( new UserRole("HR_INTERVIEWER"));
+
+            User
         };
     }
 }
