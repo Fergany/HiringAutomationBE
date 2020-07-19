@@ -23,7 +23,7 @@ public class SimpleStateMachineConfiguration
                 .initial(States.JOB_SUBMISSION)
                 .end(States.PROCESS_COMPLETED)
                 .states(
-                        new HashSet<>(Arrays.asList(States.APPLICATION_SCAN, States.HR_INTERVIEW, States.TECHNICAL_INTERVIEW)));
+                        new HashSet<>(Arrays.asList(States.APPLICATION_SCAN, States.CANDIDATE_ASSESSMENT, States.INTERVIEW_PROCESS_STARTED, States.HR_INTERVIEW, States.TECHNICAL_INTERVIEW)));
 
     }
 
@@ -36,6 +36,8 @@ public class SimpleStateMachineConfiguration
                 .source(States.JOB_SUBMISSION).target(States.APPLICATION_SCAN).event(Events.APPLICATION_SCAN).and()
                 .withExternal()
                 .source(States.APPLICATION_SCAN).target(States.CANDIDATE_ASSESSMENT).event(Events.CANDIDATE_ASSESSMENT).and()
+                .withExternal()
+                .source(States.CANDIDATE_ASSESSMENT).target(States.INTERVIEW_PROCESS_STARTED).event(Events.START_INTERVIEW_PROCESS).and()
                 .withExternal()
                 .source(States.APPLICATION_SCAN).target(States.HR_INTERVIEW).event(Events.HR_INTERVIEW).and()
                 .withExternal()

@@ -1,11 +1,14 @@
 package com.orange.hiring_automation.api;
 
+import com.orange.hiring_automation.config.Events;
+import com.orange.hiring_automation.config.States;
 import com.orange.hiring_automation.exceptions.ObjectNotFoundException;
 import com.orange.hiring_automation.model.*;
 import com.orange.hiring_automation.repository.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.statemachine.StateMachine;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,15 +20,18 @@ public class AssessmentController {
     private JobExamRepository jobExamRepository;
     private JobSubmissionRepository jobSubmissionRepository;
     private InterviewRepository interviewRepository;
+    private final StateMachine<States, Events> stateMachine;
 
     AssessmentController(AssessmentRepository assessmentRepository,
                          JobSubmissionRepository jobSubmissionRepository,
                          JobExamRepository jobExamRepository,
-                         InterviewRepository interviewRepository) {
+                         InterviewRepository interviewRepository,
+                         StateMachine<States, Events> stateMachine) {
         this.assessmentRepository = assessmentRepository;
         this.jobSubmissionRepository = jobSubmissionRepository;
         this.jobExamRepository = jobExamRepository;
         this.interviewRepository = interviewRepository;
+        this.stateMachine = stateMachine;
     }
 
     @ApiOperation(value = "Save Assessment")
@@ -41,11 +47,12 @@ public class AssessmentController {
         assessment.setCandidate(candidate);
         assessment.setExam(exam);
         Assessment newAssessment = assessmentRepository.save(assessment);
-
+        stateMachine.sendEvent(Events.CANDIDATE_ASSESSMENT);
         Interview  interview = new Interview();
         interview.setCandidate(candidate);
         interview.setAssessment(newAssessment);
         interviewRepository.save(interview);
+        stateMachine.sendEvent(Events.START_INTERVIEW_PROCESS);
         return newAssessment;
     }
 
