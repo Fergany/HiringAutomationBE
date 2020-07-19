@@ -11,16 +11,16 @@ public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "interview_id")
-    Long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "candidate_id")
-    Candidate candidate;
+    private Candidate candidate;
 
     @OneToOne
     @JoinColumn(name = "assessment_id")
-    Assessment assessment;
+    private Assessment assessment;
 
     @Column(name = "interviewer_feedback", length = 5000)
-    String interviewerFeedback;
+    private String interviewerFeedback;
 }

@@ -2,10 +2,7 @@ package com.orange.hiring_automation.api;
 
 import com.orange.hiring_automation.exceptions.ObjectNotFoundException;
 import com.orange.hiring_automation.model.*;
-import com.orange.hiring_automation.repository.AssessmentRepository;
-import com.orange.hiring_automation.repository.CandidateRepository;
-import com.orange.hiring_automation.repository.JobExamRepository;
-import com.orange.hiring_automation.repository.JobSubmissionRepository;
+import com.orange.hiring_automation.repository.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -19,20 +16,23 @@ public class AssessmentController {
     private AssessmentRepository assessmentRepository;
     private JobExamRepository jobExamRepository;
     private JobSubmissionRepository jobSubmissionRepository;
+    private InterviewRepository interviewRepository;
 
     AssessmentController(AssessmentRepository assessmentRepository,
                          JobSubmissionRepository jobSubmissionRepository,
-                         JobExamRepository jobExamRepository) {
+                         JobExamRepository jobExamRepository,
+                         InterviewRepository interviewRepository) {
         this.assessmentRepository = assessmentRepository;
         this.jobSubmissionRepository = jobSubmissionRepository;
         this.jobExamRepository = jobExamRepository;
+        this.interviewRepository = interviewRepository;
     }
 
     @ApiOperation(value = "Save Assessment")
-    @PostMapping(value = "/assessments/jobSubmission/{id}")
-    Assessment save(@ApiParam(value = "jobSubmission Id", defaultValue = "7") @PathVariable Long id) {
-        JobSubmission jobSubmission = jobSubmissionRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("JobSubmission", id));
+    @PostMapping(value = "/assessments/jobSubmission/{jobSubmissionId}")
+    Assessment save(@ApiParam(value = "jobSubmission Id", defaultValue = "7") @PathVariable Long jobSubmissionId) {
+        JobSubmission jobSubmission = jobSubmissionRepository.findById(jobSubmissionId)
+                .orElseThrow(() -> new ObjectNotFoundException("JobSubmission", jobSubmissionId));
         Job job = jobSubmission.getJob();
         Candidate candidate = jobSubmission.getCandidate();
         JobExam jobExam = jobExamRepository.findByJob(job);
@@ -40,8 +40,13 @@ public class AssessmentController {
         Assessment assessment = new Assessment();
         assessment.setCandidate(candidate);
         assessment.setExam(exam);
+        Assessment newAssessment = assessmentRepository.save(assessment);
 
-        return assessmentRepository.save(assessment);
+        Interview  interview = new Interview();
+        interview.setCandidate(candidate);
+        interview.setAssessment(newAssessment);
+        interviewRepository.save(interview);
+        return newAssessment;
     }
 
     @ApiOperation(value = "Update Assessment")
