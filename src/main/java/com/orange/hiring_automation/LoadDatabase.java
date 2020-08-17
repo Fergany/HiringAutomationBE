@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Slf4j
 class LoadDatabase {
-
     @Bean
     CommandLineRunner initDatabase(JobRepository jobRepository,
                                    ExamRepository examRepository,

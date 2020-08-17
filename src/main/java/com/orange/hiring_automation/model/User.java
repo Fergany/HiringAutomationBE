@@ -20,6 +20,10 @@ public class User {
     @JoinColumn(name = "user_role_id")
     private UserRole userRole;
 
+    public User(){
+
+    }
+
     public User(String name, UserRole userRole){
         this.name = name;
         this.userRole = userRole;

@@ -21,6 +21,10 @@ public class Interview {
     @JoinColumn(name = "assessment_id")
     private Assessment assessment;
 
+    @ManyToOne
+    @JoinColumn(name = "interviewer_id")
+    User interviewer;
+
     @Column(name = "interviewer_feedback", length = 5000)
     private String interviewerFeedback;
 }
