@@ -1,11 +1,7 @@
 package com.orange.hiring_automation;
 
-import com.orange.hiring_automation.model.Exam;
-import com.orange.hiring_automation.model.Job;
-import com.orange.hiring_automation.model.JobExam;
-import com.orange.hiring_automation.repository.ExamRepository;
-import com.orange.hiring_automation.repository.JobExamRepository;
-import com.orange.hiring_automation.repository.JobRepository;
+import com.orange.hiring_automation.model.*;
+import com.orange.hiring_automation.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -14,9 +10,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Slf4j
 class LoadDatabase {
-
     @Bean
-    CommandLineRunner initDatabase(JobRepository jobRepository, ExamRepository examRepository, JobExamRepository jobExamRepository) {
+    CommandLineRunner initDatabase(JobRepository jobRepository,
+                                   ExamRepository examRepository,
+                                   JobExamRepository jobExamRepository,
+                                   UserRoleRepository userRoleRepository,
+                                   UserRepository userRepository) {
         return args -> {
             Job sofwareEngineerJob = jobRepository.save(new Job("Software Engineer",
                     "Design and implement our PaaS eCommerce backend in Scala as well as our core infrastructure components like database mappings and web service APIs for high availability e-commerce\n" +
@@ -60,6 +59,11 @@ class LoadDatabase {
             jobExam.setExam(exam);
             jobExamRepository.save(jobExam);
             log.info("Preloading " + jobExam);
+
+            UserRole technicalInterviewerUserRole =  userRoleRepository.save( new UserRole("TECHNICAL_INTERVIEWER"));
+            UserRole HRInterviewerUserRole =  userRoleRepository.save( new UserRole("HR_INTERVIEWER"));
+
+            userRepository.save( new User("Hazem", technicalInterviewerUserRole) );
         };
     }
 }
